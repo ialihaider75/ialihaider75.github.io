@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ali Haider · Backend Engineer</title>
+<meta name="description" content="Ali Haider, Senior Backend Engineer in Lahore. Distributed systems, event-driven architecture and fintech: Java, Spring Boot, Kafka, PostgreSQL.">
+<meta name="author" content="Ali Haider">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="https://ialihaider75.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ali Haider · Backend Engineer">
+<meta property="og:description" content="Ali Haider, Senior Backend Engineer in Lahore. Distributed systems, event-driven architecture and fintech: Java, Spring Boot, Kafka, PostgreSQL.">
+<meta property="og:url" content="https://ialihaider75.github.io/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E1621'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='monospace' font-size='14' fill='%23EDF0F4'%3Eah%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="fonts/bricolage-grotesque.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/ibm-plex-sans.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  font-style: normal;
+  font-weight: 500 800;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(fonts/bricolage-grotesque.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/ibm-plex-mono-400.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/ibm-plex-mono-500.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400 600;
+  font-stretch: 100%;
+  font-display: swap;
+  src: url(fonts/ibm-plex-sans.woff2) format('woff2');
+}
+html, body { margin: 0; }
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+/* Layout: a single column read like a system diagram: hero + system walkthroughs, a trace waterfall of skills, then a deploy log of experience. */
+:root {
+  --bg: #EDF0F4;
+  --surface: #FFFFFF;
+  --surface-2: #F5F7FA;
+  --ink: #0E1621;
+  --muted: #5A6677;
+  --line: #D3DAE3;
+  --accent: #1F55E0;
+  --accent-soft: rgba(31, 85, 224, .12);
+  --ok: #1A8656;
+  --warn: #A76A12;
+  --err: #CC3E34;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A0F16; --surface: #111924; --surface-2: #0D141D; --ink: #E3E9F1; --muted: #8C99AB;
+    --line: #213042; --accent: #6A95FF; --accent-soft: rgba(106, 149, 255, .14);
+    --ok: #46C486; --warn: #E0A84A; --err: #FF6E62; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A0F16; --surface: #111924; --surface-2: #0D141D; --ink: #E3E9F1; --muted: #8C99AB;
+  --line: #213042; --accent: #6A95FF; --accent-soft: rgba(106, 149, 255, .14);
+  --ok: #46C486; --warn: #E0A84A; --err: #FF6E62; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 400 16px/1.6 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1120px; margin: 0 auto; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.mono { font-family: var(--mono); }
+.label { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+
+/* header */
+header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding-inline: max(16px, env(safe-area-inset-left, 0px));
+}
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; }
+.brand { font: 700 18px/1 var(--display); letter-spacing: -.01em; text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.brand-mark { width: 26px; height: 26px; border-radius: 6px; background: var(--ink); color: var(--bg); display: grid; place-items: center; font: 500 12px/1 var(--mono); }
+nav { display: flex; gap: 22px; align-items: center; }
+nav a { text-decoration: none; font: 500 14px/1 var(--body); color: var(--muted); }
+nav a:hover { color: var(--ink); }
+.status { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--mono); color: var(--accent); padding: 7px 10px; border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 99px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 0 currentColor; animation: ping 2s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 60%, transparent); } 70%, 100% { box-shadow: 0 0 0 7px transparent; } }
+@media (max-width: 720px) { nav a:not(.keep) { display: none; } }
+
+/* hero */
+.hero { display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: end; padding-block: 72px 36px; }
+.hero > * { min-width: 0; }
+h1 { font: 800 clamp(40px, 6.4vw, 78px)/.98 var(--display); letter-spacing: -.035em; margin: 18px 0 22px; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--accent); }
+.lede { font-size: 18px; color: var(--muted); max-width: 54ch; margin: 0 0 28px; }
+.ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 8px; font: 600 15px/1 var(--body); text-decoration: none; border: 1px solid var(--line); background: var(--surface); cursor: pointer; color: var(--ink); }
+.btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.btn:hover { transform: translateY(-1px); }
+.btn { transition: transform .15s ease; }
+
+.term { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font: 400 13px/1.65 var(--mono); }
+.term-top { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); color: var(--muted); font-size: 12px; }
+.term-top i { width: 9px; height: 9px; border-radius: 50%; background: var(--line); display: block; }
+.term-top span { margin-left: 6px; }
+.term pre { margin: 0; padding: 16px 18px; overflow-x: auto; }
+/* colour rule: blue = identity and interaction; green/red only for live system status */
+.k { color: var(--accent); } .s, .n { color: var(--ink); } .p { color: var(--muted); } .st { color: var(--ok); }
+.cursor { display: inline-block; width: 8px; height: 15px; background: var(--ink); vertical-align: -2px; animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* system walkthroughs */
+.topo { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow: hidden; margin-bottom: 96px; }
+.topo-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 24px; padding: 10px 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+.tabs button { font: 500 14px/1 var(--body); padding: 9px 12px; border-radius: 7px; border: 1px solid transparent; background: none; color: var(--muted); cursor: pointer; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-selected="true"] { background: var(--surface); color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+.flow-intro { padding: 20px 18px 0; display: grid; gap: 6px; }
+.flow-intro h3 { font: 700 24px/1.15 var(--display); letter-spacing: -.015em; margin: 0; text-wrap: balance; }
+.flow-intro p { margin: 0; color: var(--muted); max-width: 72ch; font-size: 15px; }
+#topo { display: block; width: 100%; height: 340px; }
+#topo[data-scene="0"] { height: 250px; }
+.steps { list-style: none; margin: 0; padding: 14px 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; border-top: 1px solid var(--line); }
+.steps li { display: flex; gap: 10px; align-items: baseline; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 14px; line-height: 1.45; color: var(--muted); transition: border-color .3s, background-color .3s, color .3s; min-width: 0; }
+.steps li b { font: 500 12px/1 var(--mono); color: var(--muted); }
+.steps li.on { border-color: var(--accent); color: var(--ink); background: var(--accent-soft); }
+.steps li.on b { color: var(--accent); }
+.results { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+.results > div { padding: 14px 18px 16px; min-width: 0; }
+.results > div + div { border-left: 1px solid var(--line); }
+.res-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(104px, 1fr)); gap: 12px 18px; margin-top: 12px; }
+.res { display: flex; flex-direction: column; gap: 5px; }
+.res b { font: 500 19px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.res b.good { color: var(--ok); } .res b.bad { color: var(--err); }
+.res span { font: 400 11px/1.3 var(--mono); color: var(--muted); max-width: 18ch; }
+@media (max-width: 720px) { .results { grid-template-columns: 1fr; } .results > div + div { border-left: 0; border-top: 1px solid var(--line); } }
+
+/* sections */
+section { padding-bottom: 104px; }
+.sec-head { display: grid; grid-template-columns: 220px 1fr; gap: 24px; margin-bottom: 36px; align-items: baseline; }
+.sec-head > * { min-width: 0; }
+h2 { font: 700 clamp(28px, 3.6vw, 42px)/1.05 var(--display); letter-spacing: -.025em; margin: 0 0 10px; text-wrap: balance; }
+.sec-head p { margin: 0; color: var(--muted); max-width: 62ch; }
+@media (max-width: 820px) {
+  .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 48px 28px; }
+  .sec-head { grid-template-columns: 1fr; gap: 8px; }
+  #topo, #topo[data-scene="0"] { height: 480px; }
+  #topo[data-scene="1"] { height: 420px; }
+  .tabs .long { display: none; }
+  .tabs button { padding: 9px 10px; }
+}
+
+/* trace waterfall */
+.trace { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.trace-top { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; justify-content: space-between; padding: 14px 18px; border-bottom: 1px solid var(--line); font: 400 13px/1.4 var(--mono); }
+.trace-top .tid { color: var(--muted); }
+.replay { font: 500 12px/1 var(--mono); background: none; border: 1px solid var(--line); color: var(--ink); padding: 7px 10px; border-radius: 6px; cursor: pointer; }
+.replay:hover { border-color: var(--accent); color: var(--accent); }
+.trace-body { display: grid; grid-template-columns: 1fr 300px; }
+.trace-body > * { min-width: 0; }
+.rows { padding: 8px 0 14px; border-right: 1px solid var(--line); }
+.ticks { display: grid; grid-template-columns: 220px 1fr 96px; padding: 6px 18px 8px; }
+.ticks .scale { position: relative; height: 14px; font: 400 10px/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.ticks .scale span { position: absolute; transform: translateX(-50%); }
+.ticks .scale span:first-child { transform: none; }
+.ticks .scale span:last-child { transform: translateX(-100%); }
+.row { display: grid; grid-template-columns: 220px 1fr 96px; align-items: center; width: 100%; padding: 5px 18px; border: 0; background: none; color: inherit; text-align: left; cursor: pointer; font: inherit; }
+.row:hover { background: color-mix(in srgb, var(--accent-soft) 55%, transparent); }
+.row[aria-pressed="true"] { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
+.row-name { font: 400 13px/1.3 var(--mono); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 12px; }
+.row-name .svc { color: var(--muted); }
+.row.group .row-name { font-weight: 500; }
+.lane { position: relative; height: 22px; background-image: repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 25%); background-size: 100% 100%; }
+/* one hue for every skill; level sets the strength: expert 100%, proficient 72%, working 46%, familiar 24% */
+.span { position: absolute; top: 4px; height: 14px; border-radius: 3px; background: color-mix(in srgb, var(--accent) var(--o, 100%), var(--surface)); transform-origin: left center; }
+.row.group .span { top: 10px; height: 2px; background: var(--muted); opacity: .45; }
+.row.group { margin-top: 6px; }
+.row.group:first-child { margin-top: 0; }
+.lvtag { justify-self: end; font: 500 11px/1 var(--mono); padding: 4px 7px; border-radius: 4px; white-space: nowrap; border: 1px solid color-mix(in srgb, var(--accent) var(--o, 100%), var(--line)); color: var(--ink); background: color-mix(in srgb, var(--accent) calc(var(--o, 100%) * .18), transparent); }
+.row.group .lvtag { border: 0; background: none; color: var(--muted); font-weight: 400; padding-right: 0; }
+.trace.play .span { animation: grow .7s cubic-bezier(.2,.7,.2,1) both; animation-delay: var(--d, 0s); }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.detail { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.detail h3 { font: 700 22px/1.1 var(--display); margin: 4px 0 0; letter-spacing: -.01em; }
+.detail p { margin: 0; color: var(--muted); font-size: 14px; }
+.tags { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font: 400 12px/1.4 var(--mono); margin: 0; }
+.tags dt { color: var(--muted); }
+.tags dd { margin: 0; overflow-wrap: anywhere; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 12px 18px; border-top: 1px solid var(--line); font: 400 12px/1 var(--mono); color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 18px; height: 10px; border-radius: 2px; background: color-mix(in srgb, var(--accent) var(--o), var(--surface)); display: block; }
+@media (max-width: 820px) {
+  .trace-body { grid-template-columns: 1fr; }
+  .rows { border-right: 0; border-bottom: 1px solid var(--line); }
+  /* phone: name and level on one line, full-width bar underneath, details open under the tapped skill */
+  .ticks { display: none; }
+  .rows { padding-top: 10px; }
+  .row { grid-template-columns: 1fr auto; row-gap: 6px; padding-block: 8px; }
+  .row .lane { grid-column: 1 / -1; grid-row: 2; }
+  .row-name { white-space: normal; }
+  .row.group { padding-bottom: 2px; }
+  .row.group .lane { display: none; }
+  #rows .detail { background: var(--surface-2); border-block: 1px solid var(--line); padding: 14px 18px; }
+  .detail:empty { display: none; }
+  .row-name .svc { display: none; }
+}
+
+/* experience: deploy log */
+.log { border-left: 1px solid var(--line); margin-left: 6px; display: flex; flex-direction: column; gap: 40px; }
+.entry { position: relative; padding-left: 28px; display: grid; grid-template-columns: 220px 1fr; gap: 8px 24px; }
+.entry > * { min-width: 0; }
+.entry::before { content: ""; position: absolute; left: -6px; top: 6px; width: 11px; height: 11px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+.entry.current::before { background: var(--accent); }
+.when { font: 400 13px/1.5 var(--mono); color: var(--muted); }
+.when b { display: block; color: var(--ink); font-weight: 500; }
+.entry h3 { font: 700 22px/1.2 var(--display); margin: 0 0 4px; letter-spacing: -.01em; }
+.entry .org { color: var(--muted); margin: 0 0 12px; }
+.entry ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; max-width: 68ch; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.chip { font: 400 12px/1 var(--mono); padding: 5px 8px; border-radius: 4px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
+@media (max-width: 820px) { .entry { grid-template-columns: 1fr; } }
+
+/* projects */
+.projects { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.proj { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px; transition: border-color .2s, transform .2s; min-width: 0; }
+.proj:hover { border-color: var(--accent); transform: translateY(-2px); }
+.route { font: 500 12px/1 var(--mono); display: flex; gap: 8px; align-items: center; color: var(--muted); }
+.verb { padding: 3px 6px; border-radius: 4px; color: var(--ink); font-weight: 500; border: 1px solid var(--line); background: var(--surface-2); }
+.proj:hover .verb { border-color: var(--accent); color: var(--accent); }
+.proj h3 { font: 700 21px/1.15 var(--display); margin: 0; letter-spacing: -.01em; }
+.proj p { margin: 0; color: var(--muted); font-size: 15px; flex: 1; }
+.creds { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--line); }
+.creds > * { min-width: 0; }
+.creds p { margin: 10px 0 0; color: var(--muted); font-size: 15px; line-height: 1.7; }
+.creds b { color: var(--ink); font-weight: 600; }
+@media (max-width: 720px) { .creds { grid-template-columns: 1fr; } }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.stats div { display: flex; flex-direction: column; gap: 4px; }
+.stats b { font: 500 16px/1 var(--mono); font-variant-numeric: tabular-nums; }
+.stats span { font: 400 11px/1.2 var(--mono); color: var(--muted); }
+@media (max-width: 920px) { .projects { grid-template-columns: 1fr; } }
+
+/* contact */
+.contact { background: var(--ink); color: var(--bg); border-radius: 16px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end; }
+.contact > * { min-width: 0; }
+.contact h2 { font-size: clamp(32px, 5vw, 56px); margin-bottom: 12px; }
+.contact p { margin: 0; opacity: .7; max-width: 52ch; }
+.handles { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+.copy { display: flex; gap: 0; border: 1px solid color-mix(in srgb, var(--bg) 30%, transparent); border-radius: 8px; overflow: hidden; font: 400 14px/1 var(--mono); }
+.copy output { padding: 12px 14px; user-select: all; }
+.copy button { border: 0; border-left: 1px solid color-mix(in srgb, var(--bg) 30%, transparent); background: transparent; color: inherit; padding: 0 14px; font: 500 13px/1 var(--mono); cursor: pointer; }
+.copy button:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
+.links { display: flex; gap: 16px; font: 400 14px/1 var(--mono); }
+.links a { opacity: .8; } .links a:hover { opacity: 1; }
+@media (max-width: 720px) { .contact { grid-template-columns: 1fr; } }
+footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; color: var(--muted); font: 400 12px/1.4 var(--mono); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="bar">
+      <a class="brand" href="#top"><span class="brand-mark">ah</span>Ali Haider</a>
+      <nav>
+        <a href="#stack">Stack</a>
+        <a href="#work">Experience</a>
+        <a href="#projects">Projects</a>
+        <a class="keep status" href="#contact"><span class="dot"></span>get in touch</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div>
+        <div class="label">Backend Engineer · Distributed systems · Event-driven · Fintech</div>
+        <h1>I build the services that <em>stay up</em> at 3&nbsp;a.m.</h1>
+        <p class="lede">Backend engineer in Lahore with 5+ years of building distributed systems for fintech. I work on payments, KYC, fraud prevention and notifications at high volume, using microservices, event-driven architecture and event sourcing. I care about clean architecture, test-driven development and systems that fail safely.</p>
+        <div class="ctas">
+          <a class="btn primary" href="#projects">See projects</a>
+          <a class="btn" href="#contact">Get in touch</a>
+        </div>
+      </div>
+      <div class="term" aria-label="Profile as a JSON response">
+        <div class="term-top"><i></i><i></i><i></i><span>~/ $ curl localhost:8080/v1/me</span></div>
+<pre><span class="p">HTTP/2</span> <span class="st">200 OK</span> <span class="p">· 38ms</span>
+<span class="p">{</span>
+  <span class="k">"name"</span><span class="p">:</span> <span class="s">"Ali Haider"</span><span class="p">,</span>
+  <span class="k">"role"</span><span class="p">:</span> <span class="s">"Senior Backend Engineer"</span><span class="p">,</span>
+  <span class="k">"company"</span><span class="p">:</span> <span class="s">"Moniepoint Inc."</span><span class="p">,</span>
+  <span class="k">"shipping_since"</span><span class="p">:</span> <span class="n">2019</span><span class="p">,</span>
+  <span class="k">"stack"</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s">"Java"</span><span class="p">,</span> <span class="s">"Spring Boot"</span><span class="p">,</span>
+    <span class="s">"Kafka"</span><span class="p">,</span> <span class="s">"PostgreSQL"</span>
+  <span class="p">],</span>
+  <span class="k">"domain"</span><span class="p">:</span> <span class="s">"fintech"</span><span class="p">,</span>
+  <span class="k">"location"</span><span class="p">:</span> <span class="s">"Lahore, PK"</span>
+<span class="p">}</span> <span class="cursor"></span></pre>
+      </div>
+    </div>
+
+    <div class="topo" id="flow">
+      <div class="topo-head">
+        <div class="tabs" role="tablist" aria-label="System walkthroughs">
+          <button type="button" role="tab" id="tab-0" aria-selected="true" aria-controls="flow-panel">Exactly-once<span class="long"> notifications</span></button>
+          <button type="button" role="tab" id="tab-1" aria-selected="false" aria-controls="flow-panel" tabindex="-1">Kafka<span class="long"> listener</span> rework</button>
+        </div>
+        <button class="replay" id="pause" type="button" aria-label="Pause animation">❚❚ pause</button>
+      </div>
+      <div id="flow-panel" role="tabpanel" aria-labelledby="tab-0">
+        <div class="flow-intro"><h3 id="flow-title">How my notification system delivers exactly once</h3><p id="flow-desc"></p></div>
+        <canvas id="topo" role="img"></canvas>
+        <ol class="steps" id="steps"></ol>
+        <div class="results">
+          <div><span class="label">In this demo</span><div class="res-row" id="demo"></div></div>
+          <div><span class="label">In production</span><div class="res-row" id="prod"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <section id="stack">
+      <div class="sec-head">
+        <div class="label">01 · Stack</div>
+        <div>
+          <h2>A trace through my toolkit</h2>
+          <p>Each span is a skill, laid out like a distributed trace. A longer, stronger bar means deeper experience. Click a skill to see the details.</p>
+        </div>
+      </div>
+      <div class="trace" id="trace">
+        <div class="trace-top">
+          <span><b>GET /v1/skills</b> <span class="tid" id="tid">trace_id 4bf92f3577b34da6</span></span>
+          <button class="replay" id="replay" type="button">↻ replay trace</button>
+        </div>
+        <div class="trace-body">
+          <div class="rows">
+            <div class="ticks"><span></span><div class="scale"><span style="left:0">0</span><span style="left:25%">familiar</span><span style="left:50%">working</span><span style="left:75%">proficient</span><span style="left:100%">expert</span></div></div>
+            <div id="rows"></div>
+          </div>
+          <div class="detail" id="detail" aria-live="polite"></div>
+        </div>
+        <div class="legend">
+          <span style="--o: 100%"><i></i>expert</span>
+          <span style="--o: 72%"><i></i>proficient</span>
+          <span style="--o: 46%"><i></i>working</span>
+          <span style="--o: 24%"><i></i>familiar</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="sec-head">
+        <div class="label">02 · Experience</div>
+        <div>
+          <h2>Deploy history</h2>
+          <p>Every promotion is a release. Most recent first.</p>
+        </div>
+      </div>
+      <div class="log">
+        <article class="entry current">
+          <div class="when"><b>Dec 2023 → now</b>v4 · current</div>
+          <div>
+            <h3>Senior Backend Engineer</h3>
+            <p class="org">Moniepoint Inc.</p>
+            <ul>
+              <li>Cut a Kafka event listener's latency from seconds to milliseconds by removing long-running DB transactions, with a three-phase flow that separates persistence from external API calls.</li>
+              <li>Architected a reusable event-driven alert engine with DB-configured rules and domain-event targeting. It handles 1M+ alerts a month and cut the effort for new campaigns by 90%.</li>
+              <li>Built a notification system for a savings and loan platform on a hybrid Outbox–Inbox pattern, giving exactly-once delivery across email, SMS and push at ~99.9% consistency. It lifted savings engagement by 35% and supported campaigns behind a 20% revenue uplift.</li>
+              <li>Automated JIRA webhook processing for EDD compliance cases, removing 80% of manual work and saving ~$50K a year.</li>
+              <li>Engineered the Monidesk plugin to lock down accounts after suspicious activity (device logout, session invalidation, forced KYC upgrade), reducing fraud incidents by 40% across 50K+ Monieworld accounts.</li>
+              <li>Built a resumable onboarding flow that sends 300K+ users back to their incomplete steps, raising retention by 25% with 100% compliance before access to critical features.</li>
+              <li>Implemented Google and Apple OAuth with a custom ID-token decoder against our auth server, making login 40% faster for 100K+ users.</li>
+            </ul>
+            <div class="chips"><span class="chip">Kafka</span><span class="chip">Event-driven</span><span class="chip">Outbox–Inbox</span><span class="chip">OAuth</span><span class="chip">Webhooks</span></div>
+          </div>
+        </article>
+        <article class="entry">
+          <div class="when"><b>Jan 2023 → Dec 2023</b>v3</div>
+          <div>
+            <h3>Senior Software Engineer</h3>
+            <p class="org">i2c Inc.</p>
+            <ul>
+              <li>Rebuilt OTP setup for secure fintech modules with a new configuration UI, cutting a 2–3 day process to 5–10 minutes and speeding client onboarding by 90%.</li>
+              <li>Kept a key enterprise client by fixing a critical currency-wallet defect and writing a custom DB recovery script, with 100% transaction continuity.</li>
+              <li>Resolved 10+ high-priority production issues with targeted DB scripts and code fixes, protecting revenue and SLA compliance.</li>
+            </ul>
+            <div class="chips"><span class="chip">Fintech</span><span class="chip">SQL</span><span class="chip">Production support</span></div>
+          </div>
+        </article>
+        <article class="entry">
+          <div class="when"><b>Jul 2020 → Jan 2023</b>v2</div>
+          <div>
+            <h3>Software Engineer</h3>
+            <p class="org">i2c Inc.</p>
+            <ul>
+              <li>Engineered a case-prioritization algorithm for fraud resolution that helped win 20+ new clients.</li>
+              <li>Mentored a junior engineer to full proficiency in 6 months.</li>
+            </ul>
+            <div class="chips"><span class="chip">Fraud</span><span class="chip">Algorithms</span><span class="chip">Mentoring</span></div>
+          </div>
+        </article>
+        <article class="entry">
+          <div class="when"><b>Oct 2019 → Jul 2020</b>v1</div>
+          <div>
+            <h3>Associate Software Engineer</h3>
+            <p class="org">i2c Inc.</p>
+            <ul>
+              <li>Led a multi-tenant architecture for a fintech app suite serving 100K+ users across multiple clients.</li>
+              <li>Built admin UI modules for rule configuration, cutting configuration time by 90%.</li>
+              <li>Made card search 70% faster through database indexing and query optimization.</li>
+            </ul>
+            <div class="chips"><span class="chip">Multi-tenancy</span><span class="chip">Indexing</span><span class="chip">Query tuning</span></div>
+          </div>
+        </article>
+      </div>
+      <div class="creds">
+        <div>
+          <div class="label">Education</div>
+          <p><b>Bachelor of Computer Science</b><br>University of Gujrat, Pakistan · 2015 – 2019</p>
+        </div>
+        <div>
+          <div class="label">Certifications</div>
+          <p><b>Spring Ecosystem and Core</b> · Coursera, Learning Quest · 2023<br><b>Neural Networks and Deep Learning</b> · Coursera, DeepLearning.AI · 2020</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects">
+      <div class="sec-head">
+        <div class="label">03 · Projects</div>
+        <div>
+          <h2>Selected endpoints</h2>
+          <p>Systems I've built at Moniepoint, with the numbers that mattered.</p>
+        </div>
+      </div>
+      <div class="projects">
+        <article class="proj">
+          <div class="route"><span class="verb post">POST</span>/v1/alerts</div>
+          <h3>Event-driven alert engine</h3>
+          <p>Reusable alert engine with rules stored in the database, user targeting driven by domain events, and one generic API for dynamic alert delivery.</p>
+          <div class="stats"><div><b>1M+</b><span>alerts/month</span></div><div><b>−90%</b><span>effort per campaign</span></div></div>
+        </article>
+        <article class="proj">
+          <div class="route"><span class="verb post">POST</span>/v1/notifications</div>
+          <h3>Outbox–Inbox notifications</h3>
+          <p>Exactly-once delivery across email, SMS and push for a savings and loan platform, built on a hybrid Outbox–Inbox pattern.</p>
+          <div class="stats"><div><b>~99.9%</b><span>delivery consistency</span></div><div><b>+35%</b><span>savings engagement</span></div><div><b>+20%</b><span>revenue uplift</span></div></div>
+        </article>
+        <article class="proj">
+          <div class="route"><span class="verb evt">CONSUME</span>user.events</div>
+          <h3>Kafka listener rework</h3>
+          <p>Removed long-running DB transactions from a hot event listener with a three-phase flow that keeps persistence and external API calls apart.</p>
+          <div class="stats"><div><b>s → ms</b><span>latency</span></div><div><b>3</b><span>phase flow</span></div></div>
+        </article>
+        <article class="proj">
+          <div class="route"><span class="verb put">PUT</span>/v1/accounts/{id}/lock</div>
+          <h3>Monidesk account security</h3>
+          <p>Secures accounts after suspicious activity by logging out devices, invalidating sessions and enforcing a KYC upgrade.</p>
+          <div class="stats"><div><b>−40%</b><span>fraud incidents</span></div><div><b>50K+</b><span>accounts protected</span></div></div>
+        </article>
+        <article class="proj">
+          <div class="route"><span class="verb post">POST</span>/webhooks/jira/edd</div>
+          <h3>EDD compliance automation</h3>
+          <p>JIRA webhook processing for enhanced due diligence cases, wired to third-party systems for real-time status updates and document submission.</p>
+          <div class="stats"><div><b>−80%</b><span>manual tasks</span></div><div><b>~$50K</b><span>saved per year</span></div></div>
+        </article>
+        <article class="proj">
+          <div class="route"><span class="verb post">POST</span>/oauth/token</div>
+          <h3>Google &amp; Apple sign-in</h3>
+          <p>Two-way OAuth with a custom ID-token decoder that verifies users against our auth server and issues access tokens.</p>
+          <div class="stats"><div><b>100K+</b><span>users</span></div><div><b>40%</b><span>faster login</span></div></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="contact">
+        <div>
+          <div class="label" style="color: inherit; opacity: .6">04 · Contact</div>
+          <h2>Have a system that needs to scale?</h2>
+          <p>Get in touch about backend roles or a distributed system you're building, especially in fintech.</p>
+        </div>
+        <div class="handles">
+          <div class="copy"><output id="email">ialihaider75@gmail.com</output><button type="button" id="copy">copy</button></div>
+          <div class="links"><a href="https://github.com/ialihaider75" target="_blank" rel="noopener">GitHub</a><a href="https://www.linkedin.com/in/ialihaider75" target="_blank" rel="noopener">LinkedIn</a></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Ali Haider · Lahore, Pakistan</span>
+    <span>served in 38ms · no trackers</span>
+  </footer>
+</div>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+  /* ---------- skills trace ---------- */
+  // lv: depth on a 0–4 scale (familiar, working, proficient, expert)
+  const LV = ['', 'familiar', 'working', 'proficient', 'expert'];
+  const OPACITY = ['0%', '24%', '46%', '72%', '100%'];
+  const skills = [
+    { name: 'languages & frameworks', svc: 'root', lv: 4, group: true, desc: 'What I write backend services and tests in.', tags: { languages: 'Java, Python, JavaScript, SQL' } },
+    { name: 'Java · Spring Boot', svc: 'jvm', lv: 4, desc: 'My main stack for backend services and APIs.', tags: { frameworks: 'Spring Core, Spring Boot, Apache Struts', cert: 'Spring Ecosystem and Core, 2023' } },
+    { name: 'Python · Django', svc: 'py', lv: 3, desc: 'Django services, plus data work with the scientific Python stack.', tags: { libs: 'Django, NumPy, Pandas, scikit-learn', cert: 'Neural Networks and Deep Learning, 2020' } },
+    { name: 'JavaScript', svc: 'js', lv: 2, desc: 'Front-end work for admin and configuration screens.', tags: { libs: 'jQuery' } },
+    { name: 'Testing & logging', svc: 'test', lv: 3, desc: 'Test-driven development and structured logging.', tags: { tools: 'JUnit, Selenium, Log4j', practice: 'TDD' } },
+    { name: 'data', svc: 'root', lv: 4, group: true, desc: 'Relational databases, distributed SQL and search.', tags: { engines: 'PostgreSQL, MySQL, IBM Informix, Cloud Spanner, Elasticsearch' } },
+    { name: 'SQL · PostgreSQL · MySQL', svc: 'sql', lv: 4, desc: 'Schema design, indexing, query optimization and recovery scripts for production fintech data.', tags: { result: 'card search 70% faster via indexing and query tuning' } },
+    { name: 'IBM Informix', svc: 'sql', lv: 3, desc: 'Relational database work on fintech systems.', tags: { type: 'relational' } },
+    { name: 'Google Cloud Spanner', svc: 'gcp', lv: 2, desc: 'Globally distributed, strongly consistent SQL.', tags: { type: 'distributed SQL' } },
+    { name: 'Elasticsearch', svc: 'search', lv: 2, desc: 'Full-text search and indexing.', tags: { type: 'search engine' } },
+    { name: 'messaging & infra', svc: 'root', lv: 4, group: true, desc: 'Queues, streams, containers and version control.', tags: { tools: 'Kafka, RabbitMQ, Docker, Kubernetes, Git, SVN' } },
+    { name: 'Kafka', svc: 'stream', lv: 4, desc: 'Event listeners and domain events behind alerting and notifications.', tags: { result: 'listener latency cut from seconds to milliseconds', pattern: 'three-phase flow: persist, call, commit' } },
+    { name: 'RabbitMQ', svc: 'queue', lv: 3, desc: 'Message queues for asynchronous work.', tags: { type: 'message broker' } },
+    { name: 'Docker · Kubernetes', svc: 'k8s', lv: 3, desc: 'Containerised, cloud-native services.', tags: { tools: 'Docker, Kubernetes' } },
+    { name: 'Git · SVN', svc: 'vcs', lv: 4, desc: 'Version control across teams.', tags: { tools: 'Git, Subversion' } },
+    { name: 'architecture', svc: 'root', lv: 4, group: true, desc: 'How I shape systems so they scale and fail safely.', tags: { focus: 'distributed systems, clean architecture' } },
+    { name: 'Event-driven · microservices', svc: 'arch', lv: 4, desc: 'Microservices with event sourcing and reliable messaging patterns.', tags: { patterns: 'event sourcing, Outbox–Inbox, domain events', result: 'alert engine at 1M+ alerts/month' } },
+    { name: 'REST · GraphQL APIs', svc: 'api', lv: 4, desc: 'API design, OAuth and webhook integrations.', tags: { styles: 'REST, GraphQL, webhooks', result: 'Google & Apple OAuth for 100K+ users' } },
+  ];
+  document.getElementById('tid').textContent = `trace_id 4bf92f3577b34da6 · ${skills.length} spans`;
+  const rowsEl = document.getElementById('rows');
+  const detail = document.getElementById('detail');
+  const trace = document.getElementById('trace');
+  const traceBody = detail.parentElement;
+  const narrowMQ = matchMedia('(max-width: 820px)');
+  const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+
+  skills.forEach((k, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'row' + (k.group ? ' group' : '');
+    b.setAttribute('aria-pressed', 'false');
+    const pad = k.group ? 0 : 14;
+    const width = k.lv * 25;
+    const kids = skills.slice(i + 1).findIndex(s => s.group);
+    const count = (kids < 0 ? skills.length - i - 1 : kids);
+    const tag = k.group ? `${count} skills` : LV[k.lv];
+    b.style.setProperty('--o', OPACITY[k.lv]);
+    b.setAttribute('aria-label', k.group ? `${k.name}, ${count} skills` : `${k.name}, ${LV[k.lv]}`);
+    b.innerHTML = `<span class="row-name" style="padding-left:${pad}px">${k.group ? '▾ ' : ''}${esc(k.name)}${k.group ? '' : ` <span class="svc">${esc(k.svc)}</span>`}</span>
+      <span class="lane"><span class="span" style="left:0;width:${width}%;--d:${(i * .07).toFixed(2)}s"></span></span>
+      <span class="lvtag">${tag}</span>`;
+    b.addEventListener('click', () => select(i));
+    rowsEl.appendChild(b);
+  });
+
+  function select(i) {
+    const k = skills[i];
+    rowsEl.querySelectorAll('.row').forEach((r, j) => r.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
+    const tags = Object.entries(k.tags).map(([a, v]) => `<dt>${esc(a)}</dt><dd>${esc(v)}</dd>`).join('');
+    // on phones the panel sits right under the selected row so the tap has a visible result
+    if (narrowMQ.matches) rowsEl.querySelectorAll('.row')[i].after(detail);
+    else if (detail.parentElement !== traceBody) traceBody.appendChild(detail);
+    detail.innerHTML = `<div><div class="label">${k.group ? 'group' : 'span · ' + esc(k.svc)}</div><h3>${esc(k.name)}</h3></div>
+      <p>${esc(k.desc)}</p><dl class="tags">${k.group ? '' : `<dt>depth</dt><dd>${LV[k.lv]}</dd>`}${tags}</dl>`;
+  }
+  let current = 1;
+  const pick = select;
+  select = i => { current = i; pick(i); };
+  narrowMQ.addEventListener('change', () => pick(current));
+  select(1);
+
+  function play() {
+    if (reduce) return;
+    trace.classList.remove('play'); void trace.offsetWidth; trace.classList.add('play');
+  }
+  document.getElementById('replay').addEventListener('click', play);
+  if ('IntersectionObserver' in window) {
+    let done = false;
+    new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting && !done) { done = true; play(); } }), { threshold: .3 }).observe(trace);
+  }
+
+  /* ---------- copy email ---------- */
+  const copyBtn = document.getElementById('copy');
+  copyBtn.addEventListener('click', () => {
+    const text = document.getElementById('email').textContent;
+    const ok = () => { copyBtn.textContent = 'copied'; setTimeout(() => copyBtn.textContent = 'copy', 1600); };
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents(document.getElementById('email')); const s = getSelection(); s.removeAllRanges(); s.addRange(r); copyBtn.textContent = 'press ⌘C'; };
+    try { navigator.clipboard.writeText(text).then(ok, fallback); } catch (e) { fallback(); }
+  });
+
+  /* ---------- system walkthroughs: two animated scenes on one canvas ---------- */
+  const cv = document.getElementById('topo');
+  const ctx = cv.getContext('2d');
+  const MONO = '"IBM Plex Mono", ui-monospace, monospace';
+  let W = 0, H = 0, narrow = false, colors = {};
+
+  function readColors() {
+    colors = { ink: css('--ink'), muted: css('--muted'), line: css('--line'), accent: css('--accent'), ok: css('--ok'), err: css('--err'), surface: css('--surface') };
+  }
+  function size() {
+    const dpr = Math.min(devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    narrow = W < 620;
+  }
+  function rr(x, y, w, h, r) {
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  const ease = t => t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+  const font = (wt, px) => `${wt} ${px}px ${MONO}`;
+
+  function drawNode(x, y, lines, glow = 0, color = colors.accent, sizeTo = lines) {
+    const fs = narrow ? 10 : 11;
+    ctx.font = font(500, fs);
+    const w = Math.max(...sizeTo.map(l => ctx.measureText(l).width)) + 20, h = 12 + lines.length * 15;
+    if (glow > 0) {
+      ctx.globalAlpha = glow * .4; ctx.strokeStyle = color; ctx.lineWidth = 7;
+      rr(x - w / 2, y - h / 2, w, h, 7); ctx.stroke(); ctx.globalAlpha = 1;
+    }
+    ctx.fillStyle = colors.surface; ctx.strokeStyle = glow > 0 ? color : colors.muted; ctx.lineWidth = 1.2;
+    rr(x - w / 2, y - h / 2, w, h, 7); ctx.fill(); ctx.stroke();
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    lines.forEach((l, i) => {
+      ctx.font = font(i ? 400 : 500, fs);
+      ctx.fillStyle = i ? colors.muted : colors.ink;
+      ctx.fillText(l, x, y - h / 2 + 14 + i * 15);
+    });
+    return h;
+  }
+  function edge(a, b) {
+    ctx.strokeStyle = colors.line; ctx.lineWidth = 1.2; ctx.setLineDash([3, 4]);
+    ctx.beginPath(); ctx.moveTo(...a); ctx.lineTo(...b); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  /* scene 1: transactional outbox + idempotent inbox */
+  const notif = (() => {
+    const P = { svc: [.06, .5], db: [.26, .5], relay: [.45, .5], broker: [.63, .5], notifier: [.8, .5], email: [.95, .18], sms: [.95, .5], push: [.95, .82] };
+    const CH = ['email', 'sms', 'push'];
+    let msgs, clock, nextAt, seq, glow, inboxText, stats, step, dupNote;
+    const pos = id => { const [x, y] = P[id]; return narrow ? [W * (.14 + y * .72), H * (.07 + x * .84)] : [W * (.05 + x * .9), H * (.14 + y * .72)]; };
+    function reset() { msgs = []; clock = 0; nextAt = 0; seq = 1040; glow = {}; inboxText = 'inbox: empty'; stats = { written: 0, sent: 0, dups: 0 }; step = 0; dupNote = null; }
+    function spawn() {
+      const id = ++seq, ch = CH[seq % 3];
+      glow.svc = 1;
+      const segs = [
+        { a: 'svc', b: 'db', t0: 0, t1: .8, on: () => { glow.db = 1; glow.tx = 1.6; stats.written++; step = 0; } },
+        { a: 'db', b: 'relay', t0: 1.1, t1: 1.7, on: () => { glow.relay = 1; step = 1; } },
+        { a: 'relay', b: 'broker', t0: 1.7, t1: 2.3, on: () => { glow.broker = 1; } },
+        { a: 'broker', b: 'notifier', t0: 2.5, t1: 3.1, on: () => { glow.notifier = 1; inboxText = `received #${id}`; step = 2; } },
+        { a: 'notifier', b: ch, t0: 3.3, t1: 3.9, on: () => { glow[ch] = 1; stats.sent++; step = 3; } },
+      ];
+      // every third message the broker redelivers it, which is normal at-least-once behaviour
+      if (seq % 3 === 0) segs.push({ a: 'broker', b: 'notifier', t0: 3.6, t1: 4.2, dup: true, on: () => { glow.dup = 1; stats.dups++; inboxText = `#${id} dup, skip`; dupNote = { id, t: 1.8 }; } });
+      msgs.push({ id, t: 0, segs });
+    }
+    function update(dt) {
+      clock += dt;
+      if (clock >= nextAt) { spawn(); nextAt = clock + 4.8; }
+      msgs.forEach(m => { m.t += dt; m.segs.forEach(s => { if (!s.fired && m.t >= s.t1) { s.fired = true; s.on(); } }); });
+      msgs = msgs.filter(m => m.t < 4.8);
+      for (const k in glow) glow[k] = Math.max(0, glow[k] - dt * 1.1);
+      if (dupNote && (dupNote.t -= dt) <= 0) dupNote = null;
+    }
+    function draw() {
+      [['svc', 'db'], ['db', 'relay'], ['relay', 'broker'], ['broker', 'notifier'], ...CH.map(c => ['notifier', c])].forEach(([a, b]) => edge(pos(a), pos(b)));
+      msgs.forEach(m => m.segs.forEach(s => {
+        if (m.t < s.t0 || m.t > s.t1) return;
+        const k = ease((m.t - s.t0) / (s.t1 - s.t0)), [x1, y1] = pos(s.a), [x2, y2] = pos(s.b);
+        const col = s.dup ? colors.err : colors.accent;
+        ctx.fillStyle = col;
+        for (let j = 7; j >= 0; j--) {
+          const kk = Math.max(0, k - j * .03);
+          ctx.globalAlpha = j ? (1 - j / 8) * .35 : 1;
+          ctx.beginPath(); ctx.arc(x1 + (x2 - x1) * kk, y1 + (y2 - y1) * kk, j ? 2.5 : 4, 0, 7); ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+        const hx = x1 + (x2 - x1) * k, hy = y1 + (y2 - y1) * k;
+        ctx.font = font(500, 10); ctx.textBaseline = 'middle';
+        if (narrow) { ctx.textAlign = 'left'; ctx.fillText('#' + m.id, hx + 9, hy); }
+        else { ctx.textAlign = 'center'; ctx.fillText('#' + m.id, hx, hy - 13); }
+      }));
+      drawNode(...pos('svc'), ['app service'], glow.svc);
+      const dbH = drawNode(...pos('db'), ['postgres', 'data + outbox'], glow.db);
+      drawNode(...pos('relay'), ['outbox relay'], glow.relay);
+      drawNode(...pos('broker'), ['message broker'], glow.broker);
+      const nH = drawNode(...pos('notifier'), ['notifier', inboxText], Math.max(glow.notifier || 0, glow.dup || 0), glow.dup > 0 ? colors.err : colors.accent, ['notifier', 'received #0000']);
+      CH.forEach(c => drawNode(...pos(c), [c], glow[c], colors.ok));
+      ctx.font = font(500, 10); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      if (glow.tx > 0) {
+        const [x, y] = pos('db');
+        ctx.globalAlpha = Math.min(1, glow.tx); ctx.fillStyle = colors.accent;
+        ctx.fillText('one transaction', x, y - dbH / 2 - 12); ctx.globalAlpha = 1;
+      }
+      if (dupNote) {
+        const [x, y] = pos('notifier');
+        ctx.globalAlpha = Math.min(1, dupNote.t * 1.5); ctx.fillStyle = colors.err;
+        const txt = `#${dupNote.id} already in inbox, skipped`;
+        if (narrow) { ctx.textAlign = 'left'; ctx.fillText(txt.replace(' already in inbox,', ' seen,'), x + 70, y - nH / 2 - 10); }
+        else ctx.fillText(txt, x, y - nH / 2 - 12);
+        ctx.globalAlpha = 1;
+      }
+    }
+    return {
+      title: 'How my notification system delivers exactly once',
+      desc: 'A simplified replay of the Outbox–Inbox design I built for a savings and loan platform. Message brokers can deliver the same message twice; watch the red redelivery get caught so no customer is notified twice.',
+      label: 'Animation: messages flow from an app service into Postgres with an outbox row, through a relay and broker to a notifier that skips duplicates using its inbox, then out by email, SMS or push.',
+      steps: ['Save the data and an outbox row in one database transaction', 'A relay publishes new outbox rows to the broker', 'The notifier records each message ID in its inbox and skips IDs it has seen', 'Deliver by email, SMS or push'],
+      prod: [['~99.9%', 'delivery consistency'], ['+35%', 'savings engagement'], ['+20%', 'revenue uplift from campaigns'], ['3', 'channels: email, SMS, push']],
+      demo: () => [[stats.written, 'events written'], [stats.sent, 'notifications sent'], [stats.dups, 'duplicates skipped'], [0, 'double notifications', 'good']],
+      step: () => step, warm: 3.2, reset, update, draw,
+    };
+  })();
+
+  /* scene 2: one long transaction vs three short phases, drawn as a live timeline */
+  const kafka = (() => {
+    const POOL = 3, GAP = .6, ROWS = 9;
+    let T, nextArr, before, after, freeAt, rowsB, rowsA, focus, step, held;
+    function reset() { T = 0; nextArr = 0; before = []; after = []; freeAt = Array(POOL).fill(0); rowsB = []; rowsA = []; focus = null; step = 0; held = 0; }
+    function row(rows, a, b) {
+      for (let i = 0; i < ROWS; i++) if ((rows[i] ?? -1) < a - .05) { rows[i] = b; return i; }
+      let m = 0; for (let i = 1; i < ROWS; i++) if (rows[i] < rows[m]) m = i;
+      rows[m] = b; return m;
+    }
+    function arrive() {
+      const api = 1.4 + Math.random() * .8, db = .12;
+      let s = 0; for (let i = 1; i < POOL; i++) if (freeAt[i] < freeAt[s]) s = i;
+      const st = Math.max(T, freeAt[s]), end = st + db + api + db;
+      freeAt[s] = end;
+      before.push({ arr: T, st, end, row: row(rowsB, T, end) });
+      const p1 = T + db, a1 = p1 + api, e = a1 + db;
+      const ev = { arr: T, p1: [T, p1], api: [p1, a1], p3: [a1, e], end: e, row: row(rowsA, T, e) };
+      after.push(ev);
+      if (!focus) focus = ev;
+    }
+    function update(dt) {
+      T += dt; held += dt;
+      while (T >= nextArr) { arrive(); nextArr += GAP; }
+      const keep = T - 8;
+      before = before.filter(e => e.end > keep); after = after.filter(e => e.end > keep);
+      if (focus) {
+        const want = T < focus.p1[1] ? 0 : T < focus.api[1] ? 1 : 2;
+        // hold each highlighted step long enough to read
+        if (want !== step && held > .8) { step = want; held = 0; }
+        if (T > focus.end + .8 && step === 2 && held > .8) focus = null;
+      }
+      if (T > 26) reset();
+    }
+    const counts = () => ({
+      busyB: before.filter(e => e.st <= T && T < e.end).length,
+      waitB: before.filter(e => e.arr <= T && T < e.st).length,
+      busyA: after.filter(e => (T >= e.p1[0] && T < e.p1[1]) || (T >= e.p3[0] && T < e.p3[1])).length,
+    });
+    function bar(x0, x1, y, h, fill, stroke, a = 1) {
+      if (x1 - x0 < .5) return;
+      ctx.globalAlpha = a; rr(x0, y, x1 - x0, h, Math.min(3, h / 2));
+      if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+      ctx.globalAlpha = 1;
+      if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.2; ctx.stroke(); }
+    }
+    function draw() {
+      const pad = 16, legendH = narrow ? 40 : 26, gap = 18, laneH = (H - pad * 2 - legendH - gap) / 2;
+      const pps = (W - pad * 2) / (narrow ? 4 : 7), X = t => W - pad - (T - t) * pps;
+      const c = counts();
+      const lanes = [
+        { y: pad, title: narrow ? 'Before' : 'Before · one transaction wraps the API call', evs: before, b: true, busy: c.busyB, wait: c.waitB },
+        { y: pad + laneH + gap, title: narrow ? 'After · 3 phases' : 'After · three short phases', evs: after, b: false, busy: c.busyA, wait: 0 },
+      ];
+      lanes.forEach(L => {
+        ctx.font = font(500, 11); ctx.textBaseline = 'middle'; ctx.textAlign = 'left'; ctx.fillStyle = colors.ink;
+        ctx.fillText(L.title, pad, L.y + 7);
+        ctx.textAlign = 'right';
+        const status = `${L.busy}/${POOL} connections · ${L.wait} waiting`;
+        ctx.fillStyle = L.wait ? colors.err : colors.muted; ctx.font = font(400, 11);
+        ctx.fillText(status, W - pad, L.y + 7);
+        const top = L.y + 20, rowH = (laneH - 22) / ROWS, bh = Math.max(4, rowH * .62);
+        ctx.save(); ctx.beginPath(); ctx.rect(pad, top - 2, W - pad * 2, laneH - 18); ctx.clip();
+        ctx.strokeStyle = colors.line; ctx.lineWidth = 1;
+        for (let s = Math.floor(T); X(s) > pad; s--) { ctx.beginPath(); ctx.moveTo(X(s), top); ctx.lineTo(X(s), top + laneH - 22); ctx.stroke(); }
+        L.evs.forEach(e => {
+          if (e.arr > T) return;
+          const y = top + e.row * rowH + (rowH - bh) / 2, cut = t => X(Math.min(t, T));
+          if (L.b) {
+            if (e.st > e.arr) bar(X(e.arr), cut(e.st), y, bh, colors.err, colors.err, .15);
+            if (T > e.st) bar(X(e.st), cut(e.end), y, bh, colors.accent);
+          } else {
+            bar(X(e.p1[0]), cut(e.p1[1]), y, bh, colors.accent);
+            if (T > e.api[0]) bar(X(e.api[0]), cut(e.api[1]), y, bh, colors.accent, colors.accent, .12);
+            if (T > e.p3[0]) bar(X(e.p3[0]), cut(e.p3[1]), y, bh, colors.accent);
+          }
+        });
+        ctx.restore();
+      });
+      // legend
+      let ly = H - pad - (narrow ? 22 : 6), lx = pad;
+      ctx.font = font(400, narrow ? 10 : 11); ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+      [['DB connection held', colors.accent, null, 1], ['external API call', colors.accent, colors.accent, .12], ['waiting for a connection', colors.err, colors.err, .15]].forEach(([t, f, s, a]) => {
+        if (lx > pad && lx + 22 + ctx.measureText(t).width > W - pad) { lx = pad; ly += 18; }
+        bar(lx, lx + 16, ly - 5, 10, f, s, a);
+        ctx.fillStyle = colors.muted; ctx.fillText(t, lx + 22, ly);
+        lx += 22 + ctx.measureText(t).width + (narrow ? 12 : 22);
+      });
+    }
+    return {
+      title: 'How I cut a Kafka listener from seconds to milliseconds',
+      desc: 'The listener held a database transaction open while it waited on an external API, so connections ran out and events queued up. I split the work into three short phases. Time runs right to left; each bar is one event.',
+      label: 'Animation: two timelines. Before, each event holds a database connection for its whole external API call, the pool fills up and events wait. After, events hold a connection only for two short phases and nothing waits.',
+      steps: ['Persist the event as PENDING in a short transaction', 'Call the external API with no transaction or connection held', 'Save the result in a second short transaction'],
+      prod: [['s → ms', 'listener latency'], ['0', 'transactions held during API calls'], ['3', 'short phases per event']],
+      demo: () => { const k = counts(); return [[`${k.busyB}/${POOL}`, 'before: connections busy', k.busyB >= POOL ? 'bad' : ''], [k.waitB, 'before: events waiting', k.waitB ? 'bad' : ''], [`${k.busyA}/${POOL}`, 'after: connections busy'], [0, 'after: events waiting', 'good']]; },
+      step: () => step, warm: 10, reset, update, draw,
+    };
+  })();
+
+  /* ---------- tabs, text panels and the run loop ---------- */
+  const scenes = [notif, kafka];
+  const tabs = [...document.querySelectorAll('.tabs [role="tab"]')];
+  const stepsEl = document.getElementById('steps'), demoEl = document.getElementById('demo'), prodEl = document.getElementById('prod');
+  const resHTML = ([v, l, cls]) => `<div class="res"><b class="${cls || ''}">${esc(v)}</b><span>${esc(l)}</span></div>`;
+  let scene = notif;
+
+  function render() { ctx.clearRect(0, 0, W, H); scene.draw(); }
+  function updateText() {
+    const s = scene.step();
+    [...stepsEl.children].forEach((li, i) => li.classList.toggle('on', i === s));
+    demoEl.innerHTML = scene.demo().map(resHTML).join('');
+  }
+  function setScene(i) {
+    scene = scenes[i];
+    cv.dataset.scene = i; size();
+    tabs.forEach((t, j) => { t.setAttribute('aria-selected', j === i ? 'true' : 'false'); t.tabIndex = j === i ? 0 : -1; });
+    document.getElementById('flow-panel').setAttribute('aria-labelledby', tabs[i].id);
+    document.getElementById('flow-title').textContent = scene.title;
+    document.getElementById('flow-desc').textContent = scene.desc;
+    cv.setAttribute('aria-label', scene.label);
+    stepsEl.innerHTML = scene.steps.map((s, j) => `<li><b>${j + 1}</b><span>${esc(s)}</span></li>`).join('');
+    prodEl.innerHTML = scene.prod.map(resHTML).join('');
+    scene.reset();
+    for (let t = 0; t < scene.warm; t += .05) scene.update(.05);
+    render(); updateText();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => setScene(i));
+    t.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      const j = (i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length;
+      tabs[j].focus(); setScene(j);
+    });
+  });
+
+  let last = 0, textAcc = 0;
+  function tick(now) {
+    const dt = Math.min((now - last) / 1000, .05); last = now;
+    scene.update(dt); render();
+    if ((textAcc += dt) > .2) { textAcc = 0; updateText(); }
+    if (running) raf = requestAnimationFrame(tick);
+  }
+
+  // run only while visible and not paused by the viewer (WCAG 2.2.2); reduced-motion starts paused
+  const pauseBtn = document.getElementById('pause');
+  let running = false, raf = 0, onScreen = true, userPaused = reduce;
+  function setRun() {
+    const want = !userPaused && onScreen && !document.hidden;
+    if (want && !running) { running = true; raf = requestAnimationFrame(t => { last = t; tick(t); }); }
+    else if (!want && running) { running = false; cancelAnimationFrame(raf); }
+    pauseBtn.textContent = userPaused ? '▶ play' : '❚❚ pause';
+    pauseBtn.setAttribute('aria-label', userPaused ? 'Play animation' : 'Pause animation');
+  }
+  pauseBtn.addEventListener('click', () => { userPaused = !userPaused; setRun(); });
+  document.addEventListener('visibilitychange', setRun);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(es => { onScreen = es[0].isIntersecting; setRun(); }).observe(cv);
+  }
+
+  readColors(); size();
+  addEventListener('resize', () => { size(); render(); });
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { readColors(); render(); });
+  new MutationObserver(() => { readColors(); render(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  if (document.fonts) document.fonts.ready.then(render);
+  setScene(0);
+  setRun();
+})();
+</script>
+</body>
+</html>
