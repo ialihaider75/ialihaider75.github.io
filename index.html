@@ -150,6 +150,7 @@ h1 em { font-style: normal; color: var(--accent); }
 .flow-intro p { margin: 0; color: var(--muted); max-width: 72ch; font-size: 15px; }
 #topo { display: block; width: 100%; height: 340px; }
 #topo[data-scene="0"] { height: 250px; }
+#topo[data-scene="2"] { height: 330px; }
 .steps { list-style: none; margin: 0; padding: 14px 18px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; border-top: 1px solid var(--line); }
 .steps li { display: flex; gap: 10px; align-items: baseline; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line); font-size: 14px; line-height: 1.45; color: var(--muted); transition: border-color .3s, background-color .3s, color .3s; min-width: 0; }
 .steps li b { font: 500 12px/1 var(--mono); color: var(--muted); }
@@ -176,6 +177,7 @@ h2 { font: 700 clamp(28px, 3.6vw, 42px)/1.05 var(--display); letter-spacing: -.0
   .sec-head { grid-template-columns: 1fr; gap: 8px; }
   #topo, #topo[data-scene="0"] { height: 480px; }
   #topo[data-scene="1"] { height: 420px; }
+  #topo[data-scene="2"] { height: 400px; }
   .tabs .long { display: none; }
   .tabs button { padding: 9px 10px; }
 }
@@ -277,7 +279,8 @@ h2 { font: 700 clamp(28px, 3.6vw, 42px)/1.05 var(--display); letter-spacing: -.0
 .contact p { margin: 0; opacity: .7; max-width: 52ch; }
 .handles { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
 .copy { display: flex; gap: 0; border: 1px solid color-mix(in srgb, var(--bg) 30%, transparent); border-radius: 8px; overflow: hidden; font: 400 14px/1 var(--mono); }
-.copy output { padding: 12px 14px; user-select: all; }
+.copy { max-width: 100%; }
+.copy output { padding: 12px 14px; user-select: all; min-width: 0; overflow-wrap: anywhere; }
 .copy button { border: 0; border-left: 1px solid color-mix(in srgb, var(--bg) 30%, transparent); background: transparent; color: inherit; padding: 0 14px; font: 500 13px/1 var(--mono); cursor: pointer; }
 .copy button:hover { background: color-mix(in srgb, var(--bg) 12%, transparent); }
 .links { display: flex; gap: 16px; font: 400 14px/1 var(--mono); }
@@ -339,6 +342,7 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
         <div class="tabs" role="tablist" aria-label="System walkthroughs">
           <button type="button" role="tab" id="tab-0" aria-selected="true" aria-controls="flow-panel">Exactly-once<span class="long"> notifications</span></button>
           <button type="button" role="tab" id="tab-1" aria-selected="false" aria-controls="flow-panel" tabindex="-1">Kafka<span class="long"> listener</span> rework</button>
+          <button type="button" role="tab" id="tab-2" aria-selected="false" aria-controls="flow-panel" tabindex="-1"><span class="long">Self-healing </span>Interest jobs</button>
         </div>
         <button class="replay" id="pause" type="button" aria-label="Pause animation">❚❚ pause</button>
       </div>
@@ -843,8 +847,226 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
     };
   })();
 
+  /* scene 3: self-healing interest accrual and payout jobs, one 30-day savings cycle on a loop */
+  const accrual = (() => {
+    const DAY = .55, CHECK = DAY / 2, CYCLE = 30, THREADS = 3, STEP = .12, FREE_WD = 4;
+    const OUT = [8.1, 11.6];  // job runner down from day 9 to day 12
+    const RATE = .0005;       // illustrative daily rate, not a production figure
+    const PLANS = [
+      { name: 'plan A', at: .15, principal: 1200 },
+      { name: 'plan B', at: .45, principal: 800, failDay: 18 },
+      { name: 'plan C', at: .3, principal: 2000, wds: [4, 9, 15, 19, 23] },
+      { name: 'plan D', at: .7, principal: 450 },
+    ];
+    let D, nextCheck, plans, threads, stats = { posted: 0, backfilled: 0, retried: 0 }, step, held, note, wasDown, payoutAt;
+    function reset(carry) {
+      const prev = plans;
+      D = 0; nextCheck = 0; step = 0; held = 0; note = null; wasDown = false; payoutAt = null;
+      plans = PLANS.map((p, i) => ({ ...p, principal: carry ? prev[i].principal : p.principal, next: p.at, cells: Array(CYCLE).fill(''), earned: 0, wd: 0, forfeit: false, pending: null, failedOnce: false, busy: false }));
+      threads = Array(THREADS).fill(null);
+    }
+    function bar(x0, x1, y, h, fill, stroke, a = 1) {
+      if (x1 - x0 < .5) return;
+      ctx.globalAlpha = a; rr(x0, y, x1 - x0, h, Math.min(3, h / 2));
+      if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+      ctx.globalAlpha = 1;
+      if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = 1.2; ctx.stroke(); }
+    }
+    const say = (long, short, kind = '') => { note = { long, short, kind, t: 2.6 }; };
+    const setStep = s => { if (s !== step && held > .8) { step = s; held = 0; } };
+
+    // one thread works one plan: retry check first, then every due day until the next accrual is in the future
+    function work(th, dt) {
+      th.t -= dt;
+      if (th.t > 0) return;
+      th.t = STEP;
+      const p = th.plan;
+      if (p.pending !== null) {
+        const d = p.pending;
+        p.cells[d] = 'back'; p.earned += p.principal * RATE; p.next += 1; p.pending = null; stats.retried++; stats.posted++;
+        say(`${p.name} day ${d + 1}: retried call shows success, ledger updated, nothing posted twice`, `${p.name} day ${d + 1}: retry succeeded`, 'ok');
+        setStep(3); return;
+      }
+      if (p.next > D) { p.busy = false; th.plan = null; setStep(2); return; }
+      const d = Math.floor(p.next), late = D - p.next > 1;
+      th.day = d;
+      if (p.forfeit) { p.cells[d] = 'lost'; p.next += 1; return; }
+      if (d === p.failDay && !p.failedOnce) {
+        p.failedOnce = true; p.cells[d] = 'retry'; p.pending = d;
+        say(`${p.name} day ${d + 1}: journal call failed, sent to retry queue, ledger left untouched`, `${p.name} day ${d + 1}: call failed, retry queued`, 'err');
+        p.busy = false; th.plan = null; setStep(3); return;
+      }
+      p.cells[d] = late ? 'back' : 'ok';
+      p.earned += p.principal * RATE; p.next += 1; stats.posted++;
+      if (late) { stats.backfilled++; setStep(3); } else setStep(1);
+    }
+
+    function update(dt) {
+      held += dt;
+      if (note && (note.t -= dt) <= 0) note = null;
+      if (payoutAt !== null) {
+        if ((payoutAt -= dt) <= 0) reset(true);
+        return;
+      }
+      D += dt / DAY;
+      const down = D >= OUT[0] && D < OUT[1];
+      if (down && !wasDown) say('job runner down: no runs, every plan falls behind', 'job runner down', 'err');
+      if (!down && wasDown) say('job runner back: first run finds every plan behind and backfills it', 'back up: backfilling missed days', 'ok');
+      wasDown = down;
+      plans.forEach(p => {
+        if (!p.wds) return;
+        while (p.wd < p.wds.length && D >= p.wds[p.wd]) {
+          p.wd++;
+          if (p.wd > FREE_WD && !p.forfeit) {
+            p.forfeit = true; p.earned = 0;
+            p.cells = p.cells.map(c => (c ? 'lost' : c));
+            say(`${p.name}: 5th withdrawal, this cycle's interest is forfeited`, `${p.name}: 5th withdrawal, interest forfeited`, 'err');
+          }
+        }
+      });
+      if (!down && D >= nextCheck) {
+        nextCheck = D + CHECK / DAY;
+        const due = plans.filter(p => !p.busy && (p.pending !== null || p.next <= D));
+        if (due.length) setStep(0);
+        due.forEach(p => {
+          const i = threads.findIndex(t => !t || !t.plan);
+          if (i < 0) return;   // pool is full, the plan stays due for the next run
+          p.busy = true; threads[i] = { plan: p, t: 0, day: Math.floor(p.next) };
+        });
+      }
+      if (down) nextCheck = Math.max(nextCheck, OUT[1]);
+      threads.forEach(th => th && th.plan && work(th, dt));
+      if (D >= CYCLE + .9 && threads.every(t => !t || !t.plan)) {
+        plans.forEach(p => { p.principal += p.earned; });
+        say('day 30: payout job moves each plan\'s earned interest into its principal, new cycle starts', 'day 30: interest paid into principal', 'ok');
+        payoutAt = 1.6; D = CYCLE;
+      }
+    }
+
+    function draw() {
+      const pad = 16, n = narrow, down = D >= OUT[0] && D < OUT[1];
+      const headH = n ? 44 : 30, noteH = n ? 34 : 24, thrH = n ? 46 : 40, legH = n ? 38 : 24;
+      const rowsH = H - pad * 2 - headH - noteH - thrH - legH, rowH = rowsH / plans.length;
+      const ch0 = n ? 12 : 16;
+      const LW = n ? 0 : 150, RW = n ? 0 : 240;
+      const cx0 = pad + LW, cx1 = W - pad - RW, cw = (cx1 - cx0) / CYCLE;
+      ctx.textBaseline = 'middle';
+      // header: job runner status and simulated day
+      let y = pad + 8;
+      ctx.font = font(500, 11); ctx.textAlign = 'left'; ctx.fillStyle = colors.ink;
+      const lbl = n ? 'job runner · every 15 s' : 'job runner · checks every 15 s';
+      ctx.fillText(lbl, pad, y);
+      const sx = pad + ctx.measureText(lbl).width + 10, st = payoutAt !== null ? 'payout' : down ? 'down' : 'running';
+      const sc = down ? colors.err : payoutAt !== null ? colors.ok : colors.accent;
+      ctx.font = font(500, 10); const sw = ctx.measureText(st).width + 22;
+      ctx.globalAlpha = .12; rr(sx, y - 9, sw, 18, 9); ctx.fillStyle = sc; ctx.fill(); ctx.globalAlpha = 1;
+      ctx.fillStyle = sc; ctx.beginPath(); ctx.arc(sx + 9, y, 3, 0, 7); ctx.fill(); ctx.fillText(st, sx + 16, y);
+      ctx.font = font(400, 11); ctx.fillStyle = colors.muted;
+      const dayTxt = `day ${Math.min(CYCLE, Math.floor(D) + 1)} of ${CYCLE} · time compressed`;
+      if (n) { ctx.fillText(dayTxt, pad, y + 20); } else { ctx.textAlign = 'right'; ctx.fillText(dayTxt, W - pad, y); }
+      // plan rows
+      const top = pad + headH;
+      plans.forEach((p, i) => {
+        const ry = top + i * rowH, ch = Math.min(ch0, rowH * .5);
+        const cy = n ? ry + 19 : ry + (rowH - ch) / 2;
+        const behind = Math.floor(D - p.next) + 1;
+        const sub = p.forfeit ? 'forfeited this cycle' : p.pending !== null ? `retry queued · day ${p.pending + 1}` : behind >= 2 && payoutAt === null ? `behind ${behind} days` : `next: day ${Math.min(CYCLE, Math.floor(p.next) + 1)}`;
+        const subC = p.forfeit || behind >= 2 || p.pending !== null ? colors.err : colors.muted;
+        const right = `earned ${p.earned.toFixed(2)} · principal ${Math.round(p.principal).toLocaleString('en-US')}`;
+        ctx.textAlign = 'left';
+        if (n) {
+          ctx.font = font(500, 11); ctx.fillStyle = colors.ink; ctx.fillText(p.name, pad, ry + 9);
+          const nw = ctx.measureText(p.name).width;
+          ctx.font = font(400, 10); ctx.fillStyle = subC; ctx.fillText(sub, pad + nw + 8, ry + 9);
+          ctx.fillStyle = colors.muted; ctx.textAlign = 'right';
+          ctx.fillText(`+${p.earned.toFixed(2)}${p.wds ? ` · ${p.wd}/${FREE_WD} wd` : ''}`, W - pad, ry + 9);
+        } else {
+          ctx.font = font(500, 12); ctx.fillStyle = colors.ink; ctx.fillText(p.name, pad, ry + rowH / 2 - 8);
+          ctx.font = font(400, 11); ctx.fillStyle = subC; ctx.fillText(sub, pad, ry + rowH / 2 + 9);
+          ctx.textAlign = 'right'; ctx.fillStyle = colors.muted;
+          ctx.fillText(right, W - pad, ry + rowH / 2 - (p.wds ? 8 : 0));
+          if (p.wds) ctx.fillText(`withdrawals ${p.wd} of ${FREE_WD} free`, W - pad, ry + rowH / 2 + 9);
+        }
+        for (let d = 0; d < CYCLE; d++) {
+          const x = cx0 + d * cw + 1, w = Math.max(2, cw - 2), c = p.cells[d];
+          if (!c) { ctx.globalAlpha = d <= D ? .9 : .45; bar(x, x + w, cy, ch, null, colors.line); ctx.globalAlpha = 1; continue; }
+          if (c === 'ok') bar(x, x + w, cy, ch, colors.accent);
+          if (c === 'back') { bar(x, x + w, cy, ch, colors.accent, null, .45); bar(x, x + w, cy, ch, null, colors.accent); }
+          if (c === 'retry') bar(x, x + w, cy, ch, colors.err, colors.err, .15);
+          if (c === 'lost') bar(x, x + w, cy, ch, colors.muted, null, .3);
+        }
+        if (p.wds) {
+          ctx.fillStyle = colors.err;
+          p.wds.slice(0, p.wd).forEach((wd, k) => {
+            const x = cx0 + wd * cw + cw / 2;
+            ctx.globalAlpha = k >= FREE_WD ? 1 : .5;
+            ctx.beginPath(); ctx.moveTo(x, cy + ch + 2); ctx.lineTo(x - 3, cy + ch + 7); ctx.lineTo(x + 3, cy + ch + 7); ctx.fill();
+          });
+          ctx.globalAlpha = 1;
+        }
+      });
+      // today marker and the outage band
+      const tx = cx0 + Math.min(D, CYCLE) * cw;
+      if (D > OUT[0]) {
+        ctx.globalAlpha = .07; ctx.fillStyle = colors.err;
+        ctx.fillRect(cx0 + OUT[0] * cw, top, (Math.min(D, OUT[1]) - OUT[0]) * cw, rowsH); ctx.globalAlpha = 1;
+      }
+      ctx.strokeStyle = colors.ink; ctx.globalAlpha = .35; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(tx, top - 2); ctx.lineTo(tx, top + rowsH); ctx.stroke(); ctx.globalAlpha = 1;
+      // event note
+      y = top + rowsH + noteH / 2;
+      if (note) {
+        ctx.globalAlpha = Math.min(1, note.t * 2); ctx.textAlign = 'left'; ctx.font = font(500, 11);
+        ctx.fillStyle = note.kind === 'err' ? colors.err : note.kind === 'ok' ? colors.ok : colors.ink;
+        ctx.fillText(n ? note.short : note.long, pad, y); ctx.globalAlpha = 1;
+      }
+      // thread pool
+      y = top + rowsH + noteH;
+      ctx.font = font(400, n ? 10 : 11); ctx.textAlign = 'left'; ctx.fillStyle = colors.muted;
+      const tl = n ? '' : 'thread pool';
+      ctx.fillText(tl, pad, y + thrH / 2);
+      const tx0 = n ? pad : pad + LW, slotW = ((n ? W - pad * 2 : cx1 - cx0) - (THREADS - 1) * 8) / THREADS;
+      threads.forEach((th, i) => {
+        const x = tx0 + i * (slotW + 8), busy = th && th.plan, h = thrH - 12;
+        if (busy) { ctx.globalAlpha = .1; rr(x, y + 6, slotW, h, 6); ctx.fillStyle = colors.accent; ctx.fill(); ctx.globalAlpha = 1; }
+        rr(x, y + 6, slotW, h, 6); ctx.strokeStyle = busy ? colors.accent : colors.line; ctx.lineWidth = 1.2; ctx.stroke();
+        ctx.fillStyle = busy ? colors.ink : colors.muted; ctx.textAlign = 'center'; ctx.font = font(busy ? 500 : 400, n ? 10 : 11);
+        // use the longest label that fits the slot, so text never spills out at tablet or phone widths
+        const id = th && th.plan ? th.plan.name.replace('plan ', '') : '', d = th ? th.day + 1 : 0;
+        const options = busy ? [`T${i + 1} · ${th.plan.name} · day ${d}`, `T${i + 1} · ${id} · day ${d}`, `${id} · day ${d}`, `${id} · d${d}`, id] : [`T${i + 1} idle`, `T${i + 1}`];
+        const label = options.find(o => ctx.measureText(o).width <= slotW - 12) || options[options.length - 1];
+        ctx.save(); rr(x, y + 6, slotW, h, 6); ctx.clip();
+        ctx.fillText(label, x + slotW / 2, y + 6 + h / 2);
+        ctx.restore();
+      });
+      // legend
+      let ly = H - pad - legH + 12, lx = pad;
+      ctx.font = font(400, n ? 10 : 11); ctx.textAlign = 'left';
+      [['accrued on time', 'ok'], ['backfilled', 'back'], ['retry queued', 'retry'], ['forfeited', 'lost'], ['withdrawal', 'wd']].forEach(([t, k]) => {
+        const need = 22 + ctx.measureText(t).width;
+        if (lx > pad && lx + need > W - pad) { lx = pad; ly += 18; }
+        if (k === 'ok') bar(lx, lx + 12, ly - 6, 12, colors.accent);
+        if (k === 'back') { bar(lx, lx + 12, ly - 6, 12, colors.accent, null, .45); bar(lx, lx + 12, ly - 6, 12, null, colors.accent); }
+        if (k === 'retry') bar(lx, lx + 12, ly - 6, 12, colors.err, colors.err, .15);
+        if (k === 'lost') bar(lx, lx + 12, ly - 6, 12, colors.muted, null, .3);
+        if (k === 'wd') { ctx.fillStyle = colors.err; ctx.beginPath(); ctx.moveTo(lx + 6, ly - 4); ctx.lineTo(lx + 1, ly + 5); ctx.lineTo(lx + 11, ly + 5); ctx.fill(); }
+        ctx.fillStyle = colors.muted; ctx.fillText(t, lx + 18, ly);
+        lx += need + (n ? 8 : 18);
+      });
+    }
+    return {
+      title: 'How my interest jobs heal themselves',
+      desc: 'Savings plans earn interest every day and are paid out every 30 days. Each cycle allows 4 free withdrawals; the 5th forfeits that cycle\'s interest. Watch the job runner go down for three days, then catch every plan up on its next run without losing or double-posting any interest. Amounts are illustrative.',
+      label: 'Animation: four savings plans over a 30-day cycle. A job runner checks every 15 seconds and threads post daily interest. During a three-day outage plans fall behind, then are backfilled day by day on the next run. One failed call is retried, one plan forfeits interest after a fifth withdrawal, and on day 30 interest is paid into principal.',
+      steps: ['Every 15 s, find plans whose next accrual time has passed', 'One thread per plan posts interest on the previous day\'s balance through an idempotent journal transaction', 'On success, update the local ledger and move the next accrual 24 h ahead', 'Missed days stay due, so the next run backfills them; failed calls are retried, never posted twice'],
+      prod: [['1000s', 'accruals every 15 seconds'], ['millions', 'interest earned in the first 2 months'], ['0', 'interest lost to missed runs'], ['30-day', 'payout cycle']],
+      demo: () => [[stats.backfilled, 'days backfilled'], [stats.retried, 'retries recovered'], [0, 'interest lost to missed runs', 'good'], [0, 'double postings', 'good']],
+      step: () => step, warm: 3.4, reset, update, draw,
+    };
+  })();
+
   /* ---------- tabs, text panels and the run loop ---------- */
-  const scenes = [notif, kafka];
+  const scenes = [notif, kafka, accrual];
   const tabs = [...document.querySelectorAll('.tabs [role="tab"]')];
   const stepsEl = document.getElementById('steps'), demoEl = document.getElementById('demo'), prodEl = document.getElementById('prod');
   const resHTML = ([v, l, cls]) => `<div class="res"><b class="${cls || ''}">${esc(v)}</b><span>${esc(l)}</span></div>`;
