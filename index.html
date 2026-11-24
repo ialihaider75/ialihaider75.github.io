@@ -337,7 +337,7 @@ h2 { font: 700 clamp(28px, 3.6vw, 42px)/1.05 var(--display); letter-spacing: -.0
   .tabs button { padding-block: 12px; }
 }
 /* spending-coach: a quieter companion card under the library */
-.agent-card { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 4vw, 40px); align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 4vw, 32px); }
+.agent-card { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 4vw, 40px); align-items: center; background: var(--surface); border: 1.5px dashed color-mix(in srgb, var(--accent) 40%, var(--line)); border-radius: 16px; padding: clamp(20px, 4vw, 32px); }
 .agent-card > * { min-width: 0; }
 .agent-card h3 { font: 800 clamp(24px, 3vw, 32px)/1.05 var(--display); letter-spacing: -.02em; margin: 14px 0 10px; }
 .agent-card h3 a { text-decoration: none; }
@@ -691,7 +691,7 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
             <li><div>Evaluated first<span>A spike tested Gemini and Groq before building</span></div></li>
           </ul>
           <div class="oss-meta"><span class="chip">Java 21</span><span class="chip">Spring Boot 4</span><span class="chip">PostgreSQL</span><span class="chip">Redis</span><span class="chip">Testcontainers</span></div>
-          <a class="btn" href="https://github.com/ialihaider75/spending-coach" target="_blank" rel="noopener">View on GitHub <span>↗</span></a>
+          <a class="btn" href="https://github.com/ialihaider75/spending-coach" target="_blank" rel="noopener">Follow the build on GitHub <span>↗</span></a>
         </div>
         <div class="term agent-trace" aria-label="Example agent run from the project's demo script">
           <div class="term-top"><i></i><i></i><i></i><span>demo run · scripted model</span></div>
