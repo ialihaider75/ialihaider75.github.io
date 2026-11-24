@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ali Haider · Backend Engineer</title>
-<meta name="description" content="Ali Haider, Backend Engineer in Lahore with 6+ years building scalable, event-driven fintech systems in Java and Spring Boot.">
+<meta name="description" content="Ali Haider, Backend Engineer in Lahore with 7+ years building scalable, event-driven fintech systems in Java and Spring Boot. Open to remote or relocation roles.">
 <meta name="author" content="Ali Haider">
 <meta name="color-scheme" content="light dark">
 <link rel="canonical" href="https://ialihaider75.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Ali Haider · Backend Engineer">
-<meta property="og:description" content="Ali Haider, Backend Engineer in Lahore with 6+ years building scalable, event-driven fintech systems in Java and Spring Boot.">
+<meta property="og:description" content="Ali Haider, Backend Engineer in Lahore with 7+ years building scalable, event-driven fintech systems in Java and Spring Boot. Open to remote or relocation roles.">
 <meta property="og:url" content="https://ialihaider75.github.io/">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230E1621'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-family='monospace' font-size='14' fill='%23EDF0F4'%3Eah%3C/text%3E%3C/svg%3E">
@@ -293,8 +293,9 @@ h2 { font: 700 clamp(28px, 3.6vw, 42px)/1.05 var(--display); letter-spacing: -.0
 @keyframes oss-spin { to { rotate: 360deg; } }
 .oss-inner { position: relative; background: var(--surface); border-radius: 17px; display: grid; grid-template-columns: 1fr 1.05fr; gap: clamp(24px, 4vw, 44px); padding: clamp(20px, 4vw, 40px); }
 .oss-inner > * { min-width: 0; }
-.oss-pill { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--mono); color: var(--ok); padding: 7px 11px; border-radius: 99px; border: 1px solid color-mix(in srgb, var(--ok) 35%, transparent); background: color-mix(in srgb, var(--ok) 8%, transparent); }
-.oss-pill .dot { color: var(--ok); }
+/* every badge shares the header badge's look: blue outline, words carry the meaning */
+.oss-pill { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--mono); color: var(--accent); padding: 7px 11px; border-radius: 99px; border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); background: none; }
+.oss-pill .dot { color: var(--accent); }
 .oss h3 { font: 800 clamp(28px, 3.8vw, 44px)/1.02 var(--display); letter-spacing: -.03em; margin: 18px 0 14px; text-wrap: balance; overflow-wrap: anywhere; }
 .oss h3 span { color: var(--accent); }
 .oss-pitch { margin: 0 0 20px; color: var(--muted); font-size: 17px; max-width: 46ch; }
@@ -335,6 +336,17 @@ h2 { font: 700 clamp(28px, 3.6vw, 42px)/1.05 var(--display); letter-spacing: -.0
   .row { padding-block: 11px; }
   .tabs button { padding-block: 12px; }
 }
+/* spending-coach: a quieter companion card under the library */
+.agent-card { margin-top: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: clamp(20px, 4vw, 40px); align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: clamp(20px, 4vw, 32px); }
+.agent-card > * { min-width: 0; }
+.agent-card h3 { font: 800 clamp(24px, 3vw, 32px)/1.05 var(--display); letter-spacing: -.02em; margin: 14px 0 10px; }
+.agent-card h3 a { text-decoration: none; }
+.agent-card h3 a:hover { color: var(--accent); }
+.agent-card > div > p { margin: 0 0 18px; color: var(--muted); max-width: 52ch; }
+.build-pill { display: inline-flex; align-items: center; gap: 8px; font: 500 12px/1 var(--mono); color: var(--accent); padding: 7px 11px; border-radius: 99px; border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); background: none; }
+.agent-trace pre { font-size: 13px; }
+.entry ul a { color: var(--accent); display: inline-block; padding-block: 2px; }
+@media (max-width: 900px) { .agent-card { grid-template-columns: 1fr; } }
 /* contact */
 .contact { background: var(--ink); color: var(--bg); border-radius: 16px; padding: clamp(28px, 5vw, 56px); display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end; }
 .contact > * { min-width: 0; }
@@ -367,7 +379,7 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
         <a href="#work">Experience</a>
         <a href="#projects">Projects</a>
         <a href="#oss">Open source</a>
-        <a class="keep status" href="#contact"><span class="dot"></span>get in touch</a>
+        <a class="keep status" href="#contact"><span class="dot"></span>open to work</a>
       </nav>
     </div>
   </header>
@@ -377,7 +389,7 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
       <div>
         <div class="label">Backend Engineer · Java &amp; Spring Boot · Event-driven · Fintech</div>
         <h1>I build the services that <em>stay up</em> at 3&nbsp;a.m.</h1>
-        <p class="lede">Backend engineer with 6+ years of building scalable, event-driven fintech systems in Java and Spring Boot. I design and own product features end to end, from architecture to production, with a focus on reliability, fault tolerance and measurable business impact, including work that helped drive 70% of company revenue in a quarter. I work in microservices and distributed systems, with clean, data-oriented design, in agile cross-functional teams.</p>
+        <p class="lede">Backend engineer with 7+ years of building scalable, event-driven fintech systems in Java and Spring Boot. I design and own product features end to end, from architecture to production, with a focus on reliability, fault tolerance and measurable business impact, including work that helped drive 70% of company revenue in a quarter. I work in microservices and distributed systems, with clean, data-oriented design, in agile cross-functional teams. Open to backend roles, remote or with relocation.</p>
         <div class="ctas">
           <a class="btn primary" href="#projects">See projects</a>
           <a class="btn" href="#contact">Get in touch</a>
@@ -389,14 +401,15 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
 <span class="p">{</span>
   <span class="k">"name"</span><span class="p">:</span> <span class="s">"Ali Haider"</span><span class="p">,</span>
   <span class="k">"role"</span><span class="p">:</span> <span class="s">"Backend Engineer"</span><span class="p">,</span>
-  <span class="k">"company"</span><span class="p">:</span> <span class="s">"Moniepoint Inc."</span><span class="p">,</span>
+  <span class="k">"status"</span><span class="p">:</span> <span class="s">"open to work"</span><span class="p">,</span>
+  <span class="k">"open_to"</span><span class="p">:</span> <span class="p">[</span><span class="s">"remote"</span><span class="p">,</span> <span class="s">"relocation"</span><span class="p">],</span>
   <span class="k">"shipping_since"</span><span class="p">:</span> <span class="n">2019</span><span class="p">,</span>
   <span class="k">"stack"</span><span class="p">:</span> <span class="p">[</span>
     <span class="s">"Java"</span><span class="p">,</span> <span class="s">"Spring Boot"</span><span class="p">,</span>
     <span class="s">"Kafka"</span><span class="p">,</span> <span class="s">"PostgreSQL"</span>
   <span class="p">],</span>
   <span class="k">"domain"</span><span class="p">:</span> <span class="s">"fintech"</span><span class="p">,</span>
-  <span class="k">"location"</span><span class="p">:</span> <span class="s">"Lahore, PK"</span>
+  <span class="k">"location"</span><span class="p">:</span> <span class="s">"Lahore, PK · UTC+5"</span>
 <span class="p">}</span> <span class="cursor"></span></pre>
       </div>
     </div>
@@ -461,7 +474,20 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
       </div>
       <div class="log">
         <article class="entry current">
-          <div class="when"><b>Dec 2023 → now</b>v4 · current</div>
+          <div class="when"><b>Nov 2026 → now</b>v5 · in progress</div>
+          <div>
+            <h3>Open to work · building with AI</h3>
+            <p class="org">Independent</p>
+            <ul>
+              <li>Looking for my next backend role, remote or with relocation, after my position at Moniepoint ended in a round of layoffs.</li>
+              <li>Building <a href="https://github.com/ialihaider75/spending-coach" target="_blank" rel="noopener">spending-coach</a>, a tool-calling AI agent in Java with a hand-written agent loop, guardrails and human approval before any write.</li>
+              <li>Maintaining my open-source <a href="#oss">keycloak-spring-boot-starter</a> on Maven Central.</li>
+            </ul>
+            <div class="chips"><span class="chip">AI agents</span><span class="chip">Tool calling</span><span class="chip">Open source</span></div>
+          </div>
+        </article>
+        <article class="entry">
+          <div class="when"><b>Dec 2023 → Nov 2026</b>v4</div>
           <div>
             <h3>Senior Backend Engineer</h3>
             <p class="org">Moniepoint Inc.</p>
@@ -608,7 +634,7 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
         <div class="label">04 · Open source</div>
         <div>
           <h2>I also build the tools</h2>
-          <p>My first open-source library, published to Maven Central with a Claude Code plugin that integrates it for you.</p>
+          <p>My first open-source library, published to Maven Central with a Claude Code plugin that integrates it for you, and the AI agent I'm building now.</p>
         </div>
       </div>
       <div class="oss" id="oss-card">
@@ -653,6 +679,34 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
           </div>
         </div>
       </div>
+      <article class="agent-card">
+        <div>
+          <span class="build-pill"><span class="dot"></span>In development · AI agent</span>
+          <h3><a href="https://github.com/ialihaider75/spending-coach" target="_blank" rel="noopener">spending-coach</a></h3>
+          <p>An AI agent that investigates your spending history to answer open-ended money questions. It's a hand-written tool-calling loop over a Postgres transaction store, not a chat wrapper around an LLM.</p>
+          <ul class="oss-feats">
+            <li><div>11 tools<span>The arithmetic happens in Java, never in the model</span></div></li>
+            <li><div>Guardrails<span>Step and time caps, loop detection, schema-checked calls</span></div></li>
+            <li><div>Human in the loop<span>Asks when unsure; nothing changes without approval</span></div></li>
+            <li><div>Evaluated first<span>A spike tested Gemini and Groq before building</span></div></li>
+          </ul>
+          <div class="oss-meta"><span class="chip">Java 21</span><span class="chip">Spring Boot 4</span><span class="chip">PostgreSQL</span><span class="chip">Redis</span><span class="chip">Testcontainers</span></div>
+          <a class="btn" href="https://github.com/ialihaider75/spending-coach" target="_blank" rel="noopener">View on GitHub <span>↗</span></a>
+        </div>
+        <div class="term agent-trace" aria-label="Example agent run from the project's demo script">
+          <div class="term-top"><i></i><i></i><i></i><span>demo run · scripted model</span></div>
+<pre><span class="lg-dim">user</span>  Why am I running out of money
+      before the 25th this month?
+
+<span class="k">→</span> get_overview
+<span class="k">→</span> project_month_end
+<span class="k">→</span> compare_periods <span class="lg-dim">vs 3-month avg</span>
+<span class="k">→</span> top_transactions <span class="lg-dim">biggest mover</span>
+
+<span class="lg-ok">✓ answer</span>  a cluster of weekend
+          food-delivery charges</pre>
+        </div>
+      </article>
     </section>
 
     <section id="contact">
@@ -660,7 +714,7 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
         <div>
           <div class="label" style="color: inherit; opacity: .6">05 · Contact</div>
           <h2>Have a system that needs to scale?</h2>
-          <p>Get in touch about backend roles or a distributed system you're building, especially in fintech.</p>
+          <p>I'm open to backend roles, remote or with relocation. Based in Lahore, Pakistan (UTC+5).</p>
         </div>
         <div class="handles">
           <div class="copy"><output id="email">ialihaider75@gmail.com</output><button type="button" id="copy">copy</button></div>
@@ -704,6 +758,7 @@ footer { padding-block: 32px 40px; display: flex; flex-wrap: wrap; justify-conte
     { name: 'architecture', svc: 'root', lv: 4, group: true, desc: 'How I shape systems so they scale and fail safely.', tags: { focus: 'distributed systems, clean architecture' } },
     { name: 'Event-driven · microservices', svc: 'arch', lv: 4, desc: 'Microservices with event sourcing and reliable messaging patterns.', tags: { patterns: 'event sourcing, Outbox–Inbox, domain events', result: 'alert engine at 1M+ alerts/month' } },
     { name: 'Keycloak · OAuth 2.0', svc: 'iam', lv: 4, desc: 'Identity and access management: realms, clients, roles and token flows, packaged as my open-source Spring Boot starter.', tags: { built: 'keycloak-spring-boot-starter on Maven Central', flows: 'password grant, service-account tokens, admin REST API' } },
+    { name: 'LLM agents · tool calling', svc: 'ai', lv: 2, desc: 'Building a tool-calling agent from the loop up: tool design, guardrails, human approval and evaluation.', tags: { built: 'spending-coach (in development)', providers: 'Gemini, Groq (evaluated)' } },
     { name: 'REST · GraphQL APIs', svc: 'api', lv: 4, desc: 'API design, OAuth and webhook integrations.', tags: { styles: 'REST, GraphQL, webhooks', result: 'Google & Apple OAuth for 100K+ users' } },
   ];
   document.getElementById('tid').textContent = `trace_id 4bf92f3577b34da6 · ${skills.length} spans`;
